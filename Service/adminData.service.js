@@ -1,4 +1,8 @@
 const User = require("../Model/adminData.model");
+const appUsers = require("../Model/users.model");
+const WithDrawalRequest = require("../Model/withdrawalRequest.model")
+const PopularProfile = require("../Model/popularProfile.model")
+const Transaction = require("../Model/transaction.model")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require('mongoose')
@@ -351,4 +355,24 @@ exports.deleteAdmin = async (adminId) => {
   }
 };
 
+exports.masterData = async ()=>{
+  try{
+    const userCount = await appUsers.count();
+    const paymentsCount = await Transaction.count();
+    const withdrawalRequestCount = await WithDrawalRequest.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$amount" }
+        }
+      }
+    ]);
+    const withdrawalRequestSum = withdrawalRequestCount.length > 0 ? withdrawalRequestCount[0].totalAmount : 0;
+    const adminCount = await User.count()
+    const popularProfiles = await PopularProfile.find({ status: 1 }).populate('userId');
+    return {userCount,paymentsCount,withdrawalRequestSum, adminCount, popularProfiles}
+  }catch(err){
+    return err
+  }
+}
 

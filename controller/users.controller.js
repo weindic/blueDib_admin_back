@@ -137,3 +137,14 @@ exports.makePopularUser = async (req, res) => {
       return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
+
+exports.changeKyc = async (req,res) => {
+  try{
+    let {id,status} = req.body
+    const result = await Service.kycupdate(id,status);
+    return res.status(200).json({ status: true, message:result.error??`User KYC ${result.status==2?'Approved':'Declined'} successfully`, data: result })
+  }catch(err){
+    console.error('Error in change kyc', err);
+      return res.status(500).json({ success: false, message: err.error });
+  }
+}

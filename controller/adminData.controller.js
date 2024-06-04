@@ -137,6 +137,21 @@ exports.deleteAdmin = async (req, res) => {
 };
 
 
+exports.getMasterData = async (req,res)=>{
+  try{
+    const result = await Service.masterData();
+    return res.status(200).send({result});
+  }catch(err){
+    console.log(err);
+    return res.status(500).json({
+      data: null,
+      status: false,
+      message:err.error,
+    });
+  }
+}
+
+
 
 
 

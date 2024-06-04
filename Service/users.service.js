@@ -1,9 +1,11 @@
 
 const User = require("../Model/users.model");
 const PopularProfile = require("../Model/popularProfile.model")
+const kycRequest = require("../Model/kycRequest.model")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const KycRequest = require("../Model/kycRequest.model");
 const ObjectId = mongoose.Types.ObjectId;
 
 
@@ -13,11 +15,13 @@ exports.getAllUsers = async () => {
     try {
         const users = await User.find({});
         const usersWithStatus = await Promise.all(users.map(async (user) => {
-          const popularProfileEntry = await PopularProfile.findOne({ userId: user._id, status: 1 });
-          return {
-            ...user.toObject(),
-            hasPopularProfile: !!popularProfileEntry
-          };
+            const kycDetails = await kycRequest.findOne({userId:user._id})
+            const popularProfileEntry = await PopularProfile.findOne({ userId: user._id, status: 1 });
+            return {
+                ...user.toObject(),
+                hasPopularProfile: !!popularProfileEntry,
+                kycDetails
+            };
         }));
 
         return {
@@ -45,16 +49,16 @@ exports.makePopularUser = async (userId) => {
         if (existingProfile) {
             existingProfile.status = !existingProfile.status;
             await existingProfile.save()
-            return {message:`Popular Profile tag ${existingProfile.status==1 ?'restored': 'removed' } successfully` ,success:true,existingProfile};
+            return { message: `Popular Profile tag ${existingProfile.status == 1 ? 'restored' : 'removed'} successfully`, success: true, existingProfile };
         }
         const newProfile = new PopularProfile({
             _id: new mongoose.Types.ObjectId(),
             userId,
             status: 1,
         });
-      
+
         await newProfile.save();
-        return {message:'User added to popular profile', success:true,newProfile};
+        return { message: 'User added to popular profile', success: true, newProfile };
     } catch (error) {
         console.error('Error occurred while making user Profile Popular:', error);
         return {
@@ -63,6 +67,26 @@ exports.makePopularUser = async (userId) => {
         };
     }
 };
+
+exports.kycupdate = async (id,status) => {
+    try{
+        const kyc = await KycRequest.findByIdAndUpdate(
+            id,
+            [{ $set: { status: status } }],
+            { new: true }
+        )
+        if (!kyc) {
+            return { error: 'kyc details not found' }
+        }
+        return kyc; 
+    }catch(error){
+        console.error('Error occurred while updating kyc', error);
+        return {
+            success: false,
+            message: JSON.stringify(error),
+        };
+    }
+}
 
 exports.getTransactions = async () => {
     try {

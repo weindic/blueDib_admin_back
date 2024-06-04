@@ -1,6 +1,7 @@
 const Router = require('express').Router();
 const controller = require('../controller/adminData.controller')
 const userController = require('../controller/users.controller')
+const adminAlertController = require('../controller/adminAlertController');
 
 // admin role action 
 
@@ -19,6 +20,8 @@ Router.get('/bludibs/v2/api/manage/getTransactions' ,userController.getTransacti
 Router.get('/bludibs/v2/api/manage/getWithdrawData' ,userController.getWithdrawData )
 Router.get('/bludibs/v2/api/manage/getPaymentRequest' ,userController.getPaymentRequest )
 Router.post('/bludibs/v2/api/manage/deactivateUser', userController.deactivateUser);
+Router.post('/bludibs/v2/api/manage/kyc', userController.changeKyc);
+Router.get('/bludibs/v2/api/masterData', controller.getMasterData);
 
 
 // VIP chat function ==============//
@@ -26,6 +29,13 @@ Router.post('/bludibs/v2/api/manage/deactivateUser', userController.deactivateUs
 Router.post('/bludibs/v2/api/vip/enableChat' ,userController.enableChat )
 Router.post('/bludibs/v2/api/vip/getChat' ,userController.getChat )
 Router.post('/bludibs/v2/api/makePopularUser', userController.makePopularUser);
+
+// admin alerts
+Router.post('/bludibs/v2/api/adminAlerts', adminAlertController.createAdminAlert);
+Router.get('/bludibs/v2/api/adminAlerts', adminAlertController.getAdminAlerts);
+Router.get('/bludibs/v2/api/adminAlerts/:id', adminAlertController.getAdminAlertById);
+Router.put('/bludibs/v2/api/adminAlerts/:id', adminAlertController.updateAdminAlert);
+Router.delete('/adminAlerts/:id', adminAlertController.deleteAdminAlert);
 
 //newsletter functions =======//
 // Router.get('/newsletter/:newsletterId', newsletterController.getNewsletterWithUsers);
