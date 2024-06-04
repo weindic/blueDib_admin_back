@@ -26,22 +26,18 @@ exports.addAdmin = async (req, res) => {
 
 // admin login
 exports.userLogin =  async (req, res) => {
-  const {  email, password} = req.body;
-  let responseData = {};
+    try {
+    const { email, password } = req.body;
+    const token = await Service.loginAdmin(email, password);
 
-  if ( !email || !password) {
-    responseData = {
-      data: null,
-      status: false,
-      message: "Please fill the data properly",
-    };
-
-    return res.send(responseData);
+    if (token) {
+      res.json({ token });
+    } else {
+      res.status(401).json({ message: 'Invalid email or password' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
   }
-  const data = await Service.loginAdmin(req.body);
-  console.log('checkkkk....',data);
-
-  return res.send(data);
 
 }
 

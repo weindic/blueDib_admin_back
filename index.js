@@ -6,6 +6,7 @@ require("./connection/DB");
 require('dotenv').config();
 const multer = require('multer');
 const upload = multer();
+const authenticateJWT = require('./middleware/auth');
 
 app.use(cors()); // Enable CORS for all routes
 
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Your existing route configurations
-app.use(require('./route/adminData.route'));
+app.use('',authenticateJWT,  require('./route/adminData.route'));
 
 
 const PORT = process.env.PORT || 3000; // Use a default port if PORT is not defined

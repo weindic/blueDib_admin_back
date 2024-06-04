@@ -6,7 +6,7 @@ const Transaction = require("../Model/transaction.model")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId;
+require('dotenv').config()
 
 
 exports.addAdmin  = async (data) => {
@@ -78,87 +78,32 @@ exports.addAdmin  = async (data) => {
 
 // login admin service================//
 
-exports.loginAdmin = async (data) => {
-  let responseData = {};
-
-  const { email, password, ipAddress } = data;
-
-  console.log('Payload', data);
-
+exports.loginAdmin = async (email, password) => {
   try {
-    // Validation
-    if (!email || !password) {
-      throw new Error("Email and password are required");
-    }
-
-    // Find the user with the provided email
+    const secretKey = process.env.JWT_KEY
     const user = await User.findOne({ email });
 
-    console.log('User', user);
-
     if (!user) {
-      throw new Error("Invalid email or password");
+      return null;
     }
 
-    if (user.status != 1) {
-      throw new Error("Your account is blocked by management.");
-    }
-
-    // Check if the provided password matches the stored password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    console.log('Is Password Valid', isPasswordValid);
-
     if (!isPasswordValid) {
-      throw new Error("Invalid email or password");
+      return null;
     }
 
-    const loginDetails = {
-      ip: ipAddress,
-      lastLoginTime: new Date(),
-    };
-
-    user.loginHistory.push(loginDetails);
-
-    // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
-      "recycleBaba", // Replace with your actual secret key
-      { expiresIn: "1h" } // Set the token expiration time
+      { id: user._id, email: user.email },
+      secretKey,
+      { expiresIn: '1h' }
     );
 
-    // Save the token to the user model (if needed)
-    user.token = token;
-    await user.save();
-
-    responseData = {
-      data: {
-        user: {
-          _id: user._id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          profile: user.profile,
-          phone: user.phone,
-        },
-        token,
-        loginHistory: user.loginHistory,
-      },
-      status: true,
-      message: "Login successful",
-    };
+    return token;
   } catch (error) {
-    console.error('Error in loginAdmin:', error); // Log the error for debugging
-    responseData = {
-      data: null,
-      status: false,
-      message: error.message || "An error occurred while logging in",
-    };
+    console.error('Error in authService.login:', error);
+    throw new Error('Authentication failed');
   }
-
-  console.log('Response Data', responseData);
-
-  return responseData;
 };
 
 
