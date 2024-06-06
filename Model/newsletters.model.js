@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const NewsletterSchema = new Schema({
-  // id: { type: String, required: true },
+  _id: { type: Schema.Types.ObjectId, required: true },
   emailId: { type: [String], required: true },
   users: [{ type: Schema.Types.ObjectId, ref: "User" }],
   template: { type: String },
