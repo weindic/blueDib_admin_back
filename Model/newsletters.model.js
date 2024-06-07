@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const NewsletterSchema = new Schema({
-  _id: { type: Schema.Types.ObjectId, required: true },
+  // _id: { type: Schema.Types.ObjectId, required: true },
   emailId: { type: [String], required: true },
-  users: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  users: { type: [String] },
   template: { type: String },
   status: { type: Number, required: true },
   createdBy: { type: Schema.Types.ObjectId, ref: "AdminData" },

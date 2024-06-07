@@ -9,8 +9,8 @@ Router.post(
   "/v2/api/manage/newsletter/getOne",
   newsletterController.getNewsletterById
 );
-Router.post(
-  "/v2/api/manage/newsletter/getAll",
+Router.get(
+  "/bludibs/v2/api/manage/newsletter/getAll",
   newsletterController.getAllNewsletter
 );
 Router.post(

@@ -26,7 +26,7 @@ exports.createNewsletter = async (req, res) => {
       users,
       template,
       status,
-      createdBy,
+      createdBy: req.user.id,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
