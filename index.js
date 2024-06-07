@@ -8,7 +8,12 @@ const multer = require("multer");
 const upload = multer();
 const authenticateJWT = require("./middleware/auth");
 
-app.use(cors()); // Enable CORS for all routes
+app.use(cors({
+  origin: "https://dashboard.bluedibs.com", // Replace with your actual Angular app URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 
 // Other middleware configurations
 app.use(upload.any());
