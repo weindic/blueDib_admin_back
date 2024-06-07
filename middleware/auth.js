@@ -4,10 +4,6 @@ require("dotenv").config();
 const secretKey = process.env.JWT_KEY;
 
 const authenticateJWT = (req, res, next) => {
-  if (req.originalUrl == "/bludibs/api/manage/login") {
-    next();
-    return;
-  }
   const openRoutes = [
     "/bludibs/api/manage/login",
     "/bludibs/v2/api/manage/addAdmin",

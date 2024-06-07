@@ -76,13 +76,14 @@ exports.loginAdmin = async (email, password) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return null;
+      throw new Error("User not found!");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(password);
 
     if (!isPasswordValid) {
-      return null;
+      throw new Error("Invalid Password!");
     }
 
     const token = jwt.sign({ id: user._id, email: user.email }, secretKey, {

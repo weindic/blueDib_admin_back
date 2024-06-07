@@ -1,10 +1,7 @@
 const Service = require("../Service/adminData.service");
 
-
-
-
 exports.addAdmin = async (req, res) => {
-  const {  email, name,  phone, role} = req.body;
+  const { email, name, phone, role } = req.body;
   let responseData = {};
 
   if (!name || !email || !phone || !role) {
@@ -20,28 +17,23 @@ exports.addAdmin = async (req, res) => {
   console.log(data);
 
   return res.send(data);
-
 };
 
-
 // admin login
-exports.userLogin =  async (req, res) => {
-    try {
+exports.userLogin = async (req, res) => {
+  try {
     const { email, password } = req.body;
     const token = await Service.loginAdmin(email, password);
 
     if (token) {
       res.json({ token });
     } else {
-      res.status(401).json({ message: 'Invalid email or password' });
+      res.status(401).json({ message: "Invalid email or password" });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: error.error });
   }
-
-}
-
-
+};
 
 // getAll admins
 exports.getAllAdmins = async (req, res) => {
@@ -57,7 +49,6 @@ exports.getAllAdmins = async (req, res) => {
     });
   }
 };
-
 
 // get single admin data==========//
 
@@ -75,8 +66,6 @@ exports.getAdminById = async (req, res) => {
     });
   }
 };
-
-
 
 // update single data=========//
 
@@ -96,7 +85,6 @@ exports.updateAdmin = async (req, res) => {
   }
 };
 
-
 // deactivate data=======//
 
 exports.deactivateAdmin = async (req, res) => {
@@ -113,7 +101,6 @@ exports.deactivateAdmin = async (req, res) => {
     });
   }
 };
-
 
 // delete data===========//
 
@@ -132,22 +119,16 @@ exports.deleteAdmin = async (req, res) => {
   }
 };
 
-
-exports.getMasterData = async (req,res)=>{
-  try{
+exports.getMasterData = async (req, res) => {
+  try {
     const result = await Service.masterData();
-    return res.status(200).send({result});
-  }catch(err){
+    return res.status(200).send({ result });
+  } catch (err) {
     console.log(err);
     return res.status(500).json({
       data: null,
       status: false,
-      message:err.error,
+      message: err.error,
     });
   }
-}
-
-
-
-
-
+};
