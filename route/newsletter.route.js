@@ -14,14 +14,17 @@ Router.get(
   newsletterController.getAllNewsletter
 );
 Router.post(
-  "/v2/api/manage/newsletter/updateStatus",
+  "/v2/api/manage/newsletter/updateStatus/:id",
   newsletterController.updatesNewsletterStatus
 );
 Router.post(
-  "/v2/api/manage/newsletter/updateData",
+  "/v2/api/manage/newsletter/updateData/:id",
   newsletterController.updateData
 );
-Router.post("/v2/api/manage/newsletter/delete", newsletterController.delete);
+Router.post(
+  "/v2/api/manage/newsletter/delete/:id",
+  newsletterController.delete
+);
 Router.post(
   "/v2/api/manage/newsletter/send",
   newsletterController.sendNewsletter

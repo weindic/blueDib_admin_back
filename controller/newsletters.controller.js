@@ -66,6 +66,7 @@ exports.updatesNewsletterStatus = async (req, res) => {
       req.params.id,
       req.body.status
     );
+    console.log(newsletter);
     if (!newsletter) {
       return res.status(404).json({ error: "Newsletter not found!" });
     }
@@ -78,6 +79,7 @@ exports.updatesNewsletterStatus = async (req, res) => {
 
 exports.updateData = async (req, res) => {
   try {
+    console.log("ID:", req.params.id);
     const newsletter = await NewsletterService.updateNewsletterData(
       req.params.id,
       req.body
