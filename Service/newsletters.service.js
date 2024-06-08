@@ -92,8 +92,10 @@ exports.sendNewsletter = async (newsletterId) => {
       html: newsletter.template,
     };
 
-    mailOptions.to = newsletter.emailId;
-    await transporter.sendMail(mailOptions);
+    for (const email of newsletter.emailId) {
+      mailOptions.to = email;
+      await transporter.sendMail(mailOptions);
+    }
 
     return { success: true, message: "Emails sent successfully" };
   } catch (error) {
