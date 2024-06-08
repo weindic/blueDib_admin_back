@@ -79,7 +79,6 @@ exports.updatesNewsletterStatus = async (req, res) => {
 
 exports.updateData = async (req, res) => {
   try {
-    console.log("ID:", req.params.id);
     const newsletter = await NewsletterService.updateNewsletterData(
       req.params.id,
       req.body
@@ -95,7 +94,7 @@ exports.updateData = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const newsletterId = req.body.id;
+    const newsletterId = req.params.id;
     const newsletter = await NewsletterService.deleteNewsletter(newsletterId);
 
     return res.status(200).json(newsletter);

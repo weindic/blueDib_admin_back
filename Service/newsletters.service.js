@@ -57,27 +57,19 @@ exports.updateNewsletterData = async (id, data) => {
 };
 
 exports.deleteNewsletter = async (id) => {
-  try {
-    const newsletter = await Newsletter.findByIdAndRemove({ _id: id });
-    if (!newsletter) {
-      return {
-        data: null,
-        status: false,
-        message: "Newsletter not found!",
-      };
-    }
-    return {
-      data: null,
-      status: true,
-      message: "Newsletter not found!",
-    };
-  } catch (error) {
+  const newsletter = await Newsletter.findByIdAndRemove({ _id: id });
+  if (!newsletter) {
     return {
       data: null,
       status: false,
-      message: "An error occurred while deleting newsletter",
+      message: "Newsletter not found!",
     };
   }
+  return {
+    data: null,
+    status: true,
+    message: "Newsletter not found!",
+  };
 };
 
 exports.sendNewsletter = async (newsletterId) => {
