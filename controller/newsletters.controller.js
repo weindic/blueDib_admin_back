@@ -41,8 +41,8 @@ exports.createNewsletter = async (req, res) => {
 
 exports.getNewsletterById = async (req, res) => {
   try {
-    const { newsletterId } = req.params;
-    const newsletter = await NewsletterService.getNewsletterById(newsletterId);
+    const id = req.body.id;
+    const newsletter = await NewsletterService.getNewsletterById(id);
     return res.status(200).json(newsletter);
   } catch (error) {
     console.error("Error:", error);
