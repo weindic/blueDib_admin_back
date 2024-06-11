@@ -74,4 +74,9 @@ Router.post(
   webContentController.createOrUpdateWebContent
 );
 
+Router.post(
+  "/bludibs/v2/api/withdrawal/changeStatus",
+  userController.changeWithdrawStatus
+);
+
 module.exports = Router;

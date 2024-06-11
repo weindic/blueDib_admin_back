@@ -26,7 +26,7 @@ Router.post(
   newsletterController.delete
 );
 Router.post(
-  "/v2/api/manage/newsletter/send",
+  "/bludibs/v2/api/manage/newsletter/send",
   newsletterController.sendNewsletter
 );
 module.exports = Router;

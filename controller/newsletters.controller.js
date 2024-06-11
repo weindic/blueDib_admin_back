@@ -105,7 +105,6 @@ exports.delete = async (req, res) => {
 
 exports.sendNewsletter = async (req, res) => {
   const { newsletterId } = req.body;
-
   if (!newsletterId) {
     return res
       .status(400)

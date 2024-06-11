@@ -7,7 +7,8 @@ const mongoose = require("mongoose");
 const KycRequest = require("../Model/kycRequest.model");
 const ObjectId = mongoose.Types.ObjectId;
 const PaymentMethod = require("../Model/paymentMethod.model");
-
+const Withdrawal = require("../Model/withdrawalRequest.model");
+const WithDrawalRequest = require("../Model/withdrawalRequest.model");
 exports.getAllUsers = async () => {
   try {
     const users = await User.find({});
@@ -139,7 +140,7 @@ exports.getTransactions = async () => {
       ])
       .toArray();
 
-    console.log(transactions);
+    // console.log(transactions);
 
     return {
       data: transactions,
@@ -190,7 +191,7 @@ exports.getWithdrawData = async () => {
       ])
       .toArray();
 
-    console.log(requests);
+    // console.log(requests);
 
     return {
       data: requests,
@@ -250,7 +251,7 @@ exports.getPaymentRequest = async () => {
       ])
       .toArray();
 
-    console.log(requests);
+    // console.log(requests);
 
     return {
       data: requests,
@@ -305,4 +306,25 @@ exports.deactivateUser = async (userId) => {
   } catch (error) {
     throw error;
   }
+};
+
+exports.changeWithdrawStatus = async (data) => {
+  const { id, transactionId, failedReason, status } = data;
+  const withdrawal = await WithDrawalRequest.findById(id);
+
+  if (!withdrawal) {
+    throw new Error("Withdrawal not found!");
+  }
+  if (status === "SUCCESS" && transactionId) {
+    withdrawal.transactionId = transactionId;
+    withdrawal.status = "SUCCESS";
+  } else if (status === "FAILED" && failedReason) {
+    withdrawal.failedReason = failedReason;
+    withdrawal.status = "FAILED";
+  } else {
+    throw new Error("Invalid status or missing data");
+  }
+
+  await withdrawal.save();
+  return withdrawal;
 };
