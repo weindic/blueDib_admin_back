@@ -79,9 +79,11 @@ exports.updatesNewsletterStatus = async (req, res) => {
 
 exports.updateData = async (req, res) => {
   try {
+    const newsletterId = req.body.id;
+    const updateData = req.body;
     const newsletter = await NewsletterService.updateNewsletterData(
-      req.params.id,
-      req.body
+      newsletterId,
+      updateData
     );
     if (!newsletter) {
       return res.status(404).json({ error: "Newsletter not found" });

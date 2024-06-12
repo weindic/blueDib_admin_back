@@ -18,7 +18,7 @@ Router.post(
   newsletterController.updatesNewsletterStatus
 );
 Router.post(
-  "/v2/api/manage/newsletter/updateData/:id",
+  "/v2/api/manage/newsletter/updateData",
   newsletterController.updateData
 );
 Router.post(
