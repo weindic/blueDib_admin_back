@@ -69,7 +69,7 @@ exports.deleteNewsletter = async (id) => {
     return {
       data: null,
       status: true,
-      message: "Newsletter not found!",
+      message: "Newsletter deleted successfully!",
     };
   } catch (error) {
     return {

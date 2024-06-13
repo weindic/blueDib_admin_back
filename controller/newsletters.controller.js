@@ -14,18 +14,16 @@ exports.getNewsletterWithUsers = async (req, res) => {
 
 exports.createNewsletter = async (req, res) => {
   try {
-    const { emailId, users, template, status } = req.body;
-    if (!emailId || !status) {
-      return res
-        .status(400)
-        .json({ error: "emailId, and status are required fields" });
+    const { emailId, users, template, title } = req.body;
+    if (!emailId) {
+      return res.status(400).json({ error: "emailId is required " });
     }
 
     const newsletterData = {
       emailId,
       users,
       template,
-      status,
+      title,
       createdBy: req.user.id,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -96,7 +94,8 @@ exports.updateData = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const newsletterId = req.params.id;
+    const newsletterId = req.body.id;
+
     const newsletter = await NewsletterService.deleteNewsletter(newsletterId);
 
     return res.status(200).json(newsletter);
