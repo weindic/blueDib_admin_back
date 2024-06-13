@@ -9,7 +9,7 @@ const NewsletterSchema = new Schema({
   users: { type: [String] },
   template: { type: String },
   status: { type: Number, required: true, default: 1 },
-  createdBy: { type: Schema.Types.ObjectId, ref: "AdminData" },
+  createdBy: { type: Schema.Types.ObjectId, ref: "adminData" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

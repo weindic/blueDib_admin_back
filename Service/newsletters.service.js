@@ -37,7 +37,7 @@ exports.getNewsletterById = async (newsletterId) => {
 };
 
 exports.getAllNewsletter = async () => {
-  return await Newsletter.find();
+  return await Newsletter.find().populate("createdBy", "name -_id");
 };
 
 exports.updateNewsletterStatus = async (id, status) => {
