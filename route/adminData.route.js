@@ -65,7 +65,7 @@ Router.delete("/adminAlerts/:id", adminAlertController.deleteAdminAlert);
 // Router.get('/newsletter/:newsletterId', newsletterController.getNewsletterWithUsers);
 
 //webcontent routes
-Router.post(
+Router.get(
   "/bludibs/v2/api/webcontent/get",
   webContentController.getWebContent
 );

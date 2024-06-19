@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const WebContentSchema = new mongoose.Schema({
-  _id: { type: Schema.Types.ObjectId, required: true },
+  // _id: { type: Schema.Types.ObjectId, required: true },
   emails: { type: [String] },
-  mobiles: {
+  phones: {
     type: [String],
     validate: [arrayLimit, "{PATH} exceeds the limit of 10"],
   },
