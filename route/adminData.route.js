@@ -39,4 +39,14 @@ Router.delete('/adminAlerts/:id', adminAlertController.deleteAdminAlert);
 
 //newsletter functions =======//
 // Router.get('/newsletter/:newsletterId', newsletterController.getNewsletterWithUsers);
+
+// paymet request and sell request===========//
+
+
+Router.get('/bludibs/v2/api/paymentRequests', userController.getPaymentRequest);
+Router.put('/bludibs/v2/api/updateFundStatus', userController.updateFundStatus);
+
+Router.get('/bludibs/v2/api/getSellRequestData', userController.getSellRequest);
+Router.put('/bludibs/v2/api/executeSellRequest', userController.executeSellRequest);
+
 module.exports = Router;

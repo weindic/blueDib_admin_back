@@ -3,6 +3,67 @@ const chatService = require("../Service/chat.service");
 
 // users controller=======================//
 
+
+exports.paymentRequesta = async (req, res) => {
+  try {
+    const data = await Service.getPaymentRequest();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("An error occurred in getAllAdmins controller:", error);
+    return res.status(500).json({
+      data: null,
+      status: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+
+
+exports.updateFundStatus = async (req, res) => {
+  try {
+    const data = await Service.changeAddFundRequestStatus(req.body.id, req.body.status);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("An error occurred in getAllAdmins controller:", error);
+    return res.status(500).json({
+      data: null,
+      status: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+
+exports.executeSellRequest = async (req, res) => {
+  try {
+    const data = await Service.executeSellRequest(req.body.id, req.body.status);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("An error occurred in getAllAdmins controller:", error);
+    return res.status(500).json({
+      data: null,
+      status: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+exports.getSellRequest = async (req, res) => {
+  try {
+    const data = await Service.getPlatformSellRequests();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("An error occurred in getAllAdmins controller:", error);
+    return res.status(500).json({
+      data: null,
+      status: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+
 // getAll admins
 exports.getAllUsers = async (req, res) => {
     try {
