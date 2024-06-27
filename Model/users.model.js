@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const userSchema = new Schema(
+  {
     _id: { type: Schema.Types.ObjectId, required: true },
     firebaseId: { type: String, unique: true, required: true },
     avatarPath: { type: String },
@@ -18,15 +19,19 @@ const userSchema = new Schema({
     userEquity: { type: Number, default: 10 },
     platformEquity: { type: Number, default: 2.5 },
     mobile: { type: String },
-    gender: { type: String, enum: ['MALE', 'FEMALE', 'OTHER'] },
+    gender: { type: String, enum: ["MALE", "FEMALE", "OTHER"] },
     dob: { type: Date },
     verified: { type: Boolean, default: false },
     otpSentTime: { type: Date },
     otp: { type: Number },
     activated: { type: Boolean, default: false },
-    deactivated:{ type: Boolean, default: false }
-}, { collection: 'User' });
+    deactivated: { type: Boolean, default: false },
+    updatedAt: { type: Date, default: Date.now },
+  },
+  { collection: "User" },
+  { timestamps: true }
+);
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

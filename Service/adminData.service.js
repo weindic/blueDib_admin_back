@@ -1,30 +1,26 @@
 const User = require("../Model/adminData.model");
 const appUsers = require("../Model/users.model");
-const WithDrawalRequest = require("../Model/withdrawalRequest.model")
-const PopularProfile = require("../Model/popularProfile.model")
-const Transaction = require("../Model/transaction.model")
+const WithDrawalRequest = require("../Model/withdrawalRequest.model");
+const PopularProfile = require("../Model/popularProfile.model");
+const Transaction = require("../Model/transaction.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const mongoose = require('mongoose')
-require('dotenv').config()
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-
-exports.addAdmin  = async (data) => {
+exports.addAdmin = async (data) => {
   let responseData = {};
-  const { email, name, password, role,  phone } = data;
- let prf = null
-  if(data.profile!==null){
+  const { email, name, password, role, phone } = data;
+  let prf = null;
+  if (data.profile !== null) {
     prf = data.profile;
-  }
-  else{
-    prf = 'profile.jpg';
+  } else {
+    prf = "profile.jpg";
   }
 
   try {
-
-    
     // Validation
-    if (!email || !name || !password || !role  || !phone) {
+    if (!email || !name || !password || !role || !phone) {
       throw new Error("All fields are required");
     }
 
@@ -43,14 +39,13 @@ exports.addAdmin  = async (data) => {
       const newUser = new User({
         email,
         name,
-        password:hashedPassword,
+        password: hashedPassword,
         role,
-        profile:prf,
+        profile: prf,
         phone,
-        status:1,
-        createdAt:new Date(),
-        updatedAt:new Date(),
-
+        status: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       // Save the user to the database
@@ -73,48 +68,40 @@ exports.addAdmin  = async (data) => {
   return responseData;
 };
 
-
-
-
 // login admin service================//
 
 exports.loginAdmin = async (email, password) => {
   try {
-    const secretKey = process.env.JWT_KEY
+    const secretKey = process.env.JWT_KEY;
     const user = await User.findOne({ email });
 
     if (!user) {
-      return null;
+      throw new Error("User not found!");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(password);
 
     if (!isPasswordValid) {
-      return null;
+      throw new Error("Invalid Password!");
     }
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      secretKey,
-      { expiresIn: '1h' }
-    );
+    const token = jwt.sign({ id: user._id, email: user.email }, secretKey, {
+      expiresIn: "1h",
+    });
 
     return token;
   } catch (error) {
-    console.error('Error in authService.login:', error);
-    throw new Error('Authentication failed');
+    console.error("Error in authService.login:", error);
+    throw new Error("Authentication failed");
   }
 };
 
-
-
-
 // get all admin=================//
-
 
 exports.getAllAdmins = async () => {
   try {
-    const admins = await User.find();
+    const admins = await User.find().sort({ updatedAt: 1 });
     return {
       data: admins,
       status: true,
@@ -128,8 +115,6 @@ exports.getAllAdmins = async () => {
     };
   }
 };
-
-
 
 // get single admin data============//
 
@@ -170,8 +155,11 @@ exports.updateAdmin = async (adminId, updateData) => {
 
       // Check if the existing user and its password are valid
       if (existingUser) {
-        const isPasswordValid = await bcrypt.compare(password, existingUser.password);
-        
+        const isPasswordValid = await bcrypt.compare(
+          password,
+          existingUser.password
+        );
+
         // If the password is not valid, hash the provided password
         if (!isPasswordValid) {
           updateData.password = await bcrypt.hash(password, 10);
@@ -179,17 +167,15 @@ exports.updateAdmin = async (adminId, updateData) => {
       }
     }
 
-
-
     const setData = {
-      "name": updateData.name,         
-      "email": updateData.email,
-      "phone": updateData.mobile,    
-      "password": updateData.password,
-      "role": updateData.role,
+      name: updateData.name,
+      email: updateData.email,
+      phone: updateData.mobile,
+      password: updateData.password,
+      role: updateData.role,
 
-      updatedAt:new Date(),
-    }
+      updatedAt: new Date(),
+    };
 
     const admin = await User.findByIdAndUpdate(adminId, setData, { new: true });
 
@@ -215,7 +201,6 @@ exports.updateAdmin = async (adminId, updateData) => {
   }
 };
 
-
 // deactivate the admin data==========//
 
 exports.deactivateAdmin = async (adminId) => {
@@ -235,12 +220,18 @@ exports.deactivateAdmin = async (adminId) => {
     const newStatus = admin.status == 1 ? 0 : 1;
 
     // Update the status
-    const updatedAdmin = await User.findByIdAndUpdate(adminId, { status: newStatus }, { new: true });
+    const updatedAdmin = await User.findByIdAndUpdate(
+      adminId,
+      { status: newStatus },
+      { new: true }
+    );
 
     return {
       data: updatedAdmin,
       status: true,
-      message: `Admin status toggled successfully (new status: ${newStatus==1? 'Unblocked':'Blocked'})`,
+      message: `Admin status toggled successfully (new status: ${
+        newStatus == 1 ? "Unblocked" : "Blocked"
+      })`,
     };
   } catch (error) {
     console.error("Error toggling admin status:", error); // Log the error for debugging
@@ -254,13 +245,12 @@ exports.deactivateAdmin = async (adminId) => {
   }
 };
 
-
 // delete admin data===========//
 
 exports.deleteAdmin = async (adminId) => {
   try {
     const admin = await User.findById(adminId);
-    
+
     if (!admin) {
       return {
         data: null,
@@ -270,9 +260,12 @@ exports.deleteAdmin = async (adminId) => {
     }
 
     // Check if the admin has role 1
-    if (admin.role === '1') {
+    if (admin.role === "1") {
       // Check if there are other admins with role 1
-      const otherRoleOneAdmins = await User.countDocuments({ role: '1', _id: { $ne: adminId } });
+      const otherRoleOneAdmins = await User.countDocuments({
+        role: "1",
+        _id: { $ne: adminId },
+      });
 
       if (otherRoleOneAdmins === 0) {
         return {
@@ -300,24 +293,34 @@ exports.deleteAdmin = async (adminId) => {
   }
 };
 
-exports.masterData = async ()=>{
-  try{
+exports.masterData = async () => {
+  try {
     const userCount = await appUsers.count();
     const paymentsCount = await Transaction.count();
     const withdrawalRequestCount = await WithDrawalRequest.aggregate([
       {
         $group: {
           _id: null,
-          totalAmount: { $sum: "$amount" }
-        }
-      }
+          totalAmount: { $sum: "$amount" },
+        },
+      },
     ]);
-    const withdrawalRequestSum = withdrawalRequestCount.length > 0 ? withdrawalRequestCount[0].totalAmount : 0;
-    const adminCount = await User.count()
-    const popularProfiles = await PopularProfile.find({ status: 1 }).populate('userId');
-    return {userCount,paymentsCount,withdrawalRequestSum, adminCount, popularProfiles}
-  }catch(err){
-    return err
+    const withdrawalRequestSum =
+      withdrawalRequestCount.length > 0
+        ? withdrawalRequestCount[0].totalAmount
+        : 0;
+    const adminCount = await User.count();
+    const popularProfiles = await PopularProfile.find({ status: 1 }).populate(
+      "userId"
+    );
+    return {
+      userCount,
+      paymentsCount,
+      withdrawalRequestSum,
+      adminCount,
+      popularProfiles,
+    };
+  } catch (err) {
+    return err;
   }
-}
-
+};

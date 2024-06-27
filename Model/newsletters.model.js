@@ -1,15 +1,25 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
+const NewsletterSchema = new Schema(
+  {
+    // _id: { type: Schema.Types.ObjectId, required: true },
+    emailId: { type: [String], required: true },
+    title: { type: String },
 
-const NewsletterSchema = new mongoose.Schema({
-    id: { type: String, required: true },
-  emailId: { type: String, required: true },
-  users: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
-  template: { type: String },
-  status: { type: String, required: true },
-  createdBy: { type: Schema.Types.ObjectId, ref: 'AdminData' }, 
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-})
+    users: { type: [String] },
+    template: { type: String },
+    status: { type: Number, required: true, default: 1 },
+    createdBy: { type: Schema.Types.ObjectId, ref: "adminData" },
+    // createdAt: { type: Date, default: Date.now },
+    // updatedAt: { type: Date, default: Date.now },
+  },
+  { timestamps: true }
+);
+
+NewsletterSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
 
 module.exports = mongoose.model("Newsletter", NewsletterSchema);
