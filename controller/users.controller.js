@@ -240,3 +240,15 @@ exports.getMonthlyRegistrations = async (req, res) => {
     res.status(500).json({ message: result.message });
   }
 };
+
+exports.getRegistrationByRange = async (req, res) => {
+  const range = req.query.range;
+
+  try {
+    const users = await Service.getRegistrationsByRange(range);
+    res.status(200).json({ status: true, data: users });
+  } catch (error) {
+    console.error("Error in getRegistrationsByRange controller:", error);
+    res.status(500).json({ status: false, message: "Server error" });
+  }
+};

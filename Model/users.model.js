@@ -27,9 +27,10 @@ const userSchema = new Schema(
     activated: { type: Boolean, default: false },
     deactivated: { type: Boolean, default: false },
     updatedAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
-  { collection: "User" },
-  { timestamps: true }
+  { collection: "User", timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);

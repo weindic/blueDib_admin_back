@@ -42,6 +42,10 @@ Router.get(
   "/bludibs/v2/api/monthlyReg",
   userController.getMonthlyRegistrations
 );
+Router.get(
+  "/bludibs/v2/api/getRegByReg",
+  userController.getRegistrationByRange
+);
 
 // VIP chat function ==============//
 

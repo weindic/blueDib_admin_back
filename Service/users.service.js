@@ -629,3 +629,59 @@ exports.getMonthlyRegistrations = async () => {
     };
   }
 };
+
+exports.getRegistrationsByRange = async (range) => {
+  try {
+    let startDate, endDate;
+    const now = new Date();
+
+    switch (range) {
+      case "today":
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        endDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() + 1
+        );
+        break;
+      case "thisMonth":
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        console.log("Start Date: ", startDate);
+        console.log("End Date: ", endDate);
+        break;
+      case "thisYear":
+        startDate = new Date(now.getFullYear(), 0, 1);
+        endDate = new Date(now.getFullYear() + 1, 0, 1);
+        console.log("Year Start Date: ", startDate);
+        console.log("Year End Date: ", endDate);
+        break;
+      default:
+        throw new Error("Invalid range");
+    }
+
+    const users = await User.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lt: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    return users;
+  } catch (error) {
+    console.error("Error fetching user registrations:", error);
+    throw error;
+  }
+};
