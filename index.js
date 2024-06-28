@@ -22,6 +22,8 @@ app.use("", authenticateJWT, require("./route/newsletter.route"));
 
 const PORT = process.env.PORT || 3000; // Use a default port if PORT is not defined
 
+
 app.listen(PORT, () => {
   console.log(`Backend running on ${PORT}`);
 });
+
