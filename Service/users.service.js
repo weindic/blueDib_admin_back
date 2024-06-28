@@ -597,3 +597,35 @@ exports.changeWithdrawStatus = async (data) => {
   await withdrawal.save();
   return withdrawal;
 };
+
+exports.getMonthlyRegistrations = async () => {
+  try {
+    const monthlyRegistrations = await User.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    return {
+      data: monthlyRegistrations,
+      status: true,
+      message: "Monthly registrations retrieved successfully",
+    };
+  } catch (error) {
+    console.error(
+      "Error occurred while retrieving monthly registrations:",
+      error
+    );
+    return {
+      data: null,
+      status: false,
+      message: "An error occurred while retrieving monthly registrations",
+    };
+  }
+};

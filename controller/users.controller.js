@@ -3,7 +3,6 @@ const chatService = require("../Service/chat.service");
 
 // users controller=======================//
 
-
 exports.paymentRequesta = async (req, res) => {
   try {
     const data = await Service.getPaymentRequest();
@@ -18,11 +17,12 @@ exports.paymentRequesta = async (req, res) => {
   }
 };
 
-
-
 exports.updateFundStatus = async (req, res) => {
   try {
-    const data = await Service.changeAddFundRequestStatus(req.body.id, req.body.status);
+    const data = await Service.changeAddFundRequestStatus(
+      req.body.id,
+      req.body.status
+    );
     return res.status(200).json(data);
   } catch (error) {
     console.error("An error occurred in getAllAdmins controller:", error);
@@ -33,7 +33,6 @@ exports.updateFundStatus = async (req, res) => {
     });
   }
 };
-
 
 exports.executeSellRequest = async (req, res) => {
   try {
@@ -62,7 +61,6 @@ exports.getSellRequest = async (req, res) => {
     });
   }
 };
-
 
 // getAll admins
 exports.getAllUsers = async (req, res) => {
@@ -231,5 +229,14 @@ exports.changeWithdrawStatus = async (req, res) => {
       .json({ message: "Withdrawal updated successfully", updatedWithdrawal });
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+exports.getMonthlyRegistrations = async (req, res) => {
+  const result = await Service.getMonthlyRegistrations();
+  if (result.status) {
+    res.status(200).json(result.data);
+  } else {
+    res.status(500).json({ message: result.message });
   }
 };

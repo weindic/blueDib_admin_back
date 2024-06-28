@@ -38,6 +38,10 @@ Router.post(
 );
 Router.post("/bludibs/v2/api/manage/kyc", userController.changeKyc);
 Router.get("/bludibs/v2/api/masterData", controller.getMasterData);
+Router.get(
+  "/bludibs/v2/api/monthlyReg",
+  userController.getMonthlyRegistrations
+);
 
 // VIP chat function ==============//
 
