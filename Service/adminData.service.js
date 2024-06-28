@@ -101,7 +101,7 @@ exports.loginAdmin = async (email, password) => {
 
 exports.getAllAdmins = async () => {
   try {
-    const admins = await User.find();
+    const admins = await User.find().sort({ updatedAt: 1 });
     return {
       data: admins,
       status: true,

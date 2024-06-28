@@ -3,7 +3,7 @@ const controller = require("../controller/adminData.controller");
 const userController = require("../controller/users.controller");
 const adminAlertController = require("../controller/adminAlertController");
 const webContentController = require("../controller/webContent.controller");
-
+const notifController = require("../controller/notif.controller");
 // admin role action
 
 Router.post("/bludibs/api/manage/login", controller.userLogin);
@@ -38,6 +38,10 @@ Router.post(
 );
 Router.post("/bludibs/v2/api/manage/kyc", userController.changeKyc);
 Router.get("/bludibs/v2/api/masterData", controller.getMasterData);
+Router.get(
+  "/bludibs/v2/api/monthlyReg",
+  userController.getMonthlyRegistrations
+);
 
 // VIP chat function ==============//
 
@@ -64,14 +68,37 @@ Router.delete("/adminAlerts/:id", adminAlertController.deleteAdminAlert);
 //newsletter functions =======//
 // Router.get('/newsletter/:newsletterId', newsletterController.getNewsletterWithUsers);
 
+// paymet request and sell request===========//
+
+Router.get("/bludibs/v2/api/paymentRequests", userController.getPaymentRequest);
+Router.put("/bludibs/v2/api/updateFundStatus", userController.updateFundStatus);
+
+Router.get("/bludibs/v2/api/getSellRequestData", userController.getSellRequest);
+Router.put(
+  "/bludibs/v2/api/executeSellRequest",
+  userController.executeSellRequest
+);
+
 //webcontent routes
-Router.post(
+Router.get(
   "/bludibs/v2/api/webcontent/get",
   webContentController.getWebContent
 );
 Router.post(
   "/bludibs/v2/api/webcontent/add",
   webContentController.createOrUpdateWebContent
+);
+
+Router.post(
+  "/bludibs/v2/api/withdrawal/changeStatus",
+  userController.changeWithdrawStatus
+);
+
+//notification routes
+Router.post("/v2/api/manage/notif/send", notifController.createNotification);
+Router.post(
+  "/v2/api/manage/notif/getNotif",
+  notifController.getNotificationsByToId
 );
 
 module.exports = Router;

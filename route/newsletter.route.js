@@ -2,11 +2,11 @@ const Router = require("express").Router();
 const newsletterController = require("../controller/newsletters.controller");
 
 Router.post(
-  "/v2/api/manage/newsletter/create",
+  "/bludibs/v2/api/manage/newsletter/create",
   newsletterController.createNewsletter
 );
 Router.post(
-  "/v2/api/manage/newsletter/getOne",
+  "/bludibs/v2/api/manage/newsletter/getOne",
   newsletterController.getNewsletterById
 );
 Router.get(
@@ -14,7 +14,7 @@ Router.get(
   newsletterController.getAllNewsletter
 );
 Router.post(
-  "/v2/api/manage/newsletter/updateStatus",
+  "/v2/api/manage/newsletter/updateStatus/:id",
   newsletterController.updatesNewsletterStatus
 );
 Router.post(
@@ -23,7 +23,7 @@ Router.post(
 );
 Router.post("/v2/api/manage/newsletter/delete", newsletterController.delete);
 Router.post(
-  "/v2/api/manage/newsletter/send",
+  "/bludibs/v2/api/manage/newsletter/send",
   newsletterController.sendNewsletter
 );
 module.exports = Router;

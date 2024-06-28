@@ -1,48 +1,49 @@
 const mongoose = require("mongoose");
-const AdminDataSchema = new mongoose.Schema({
+const AdminDataSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      unique: true,
+    },
+    profile: {
+      type: String,
+    },
+    name: {
+      type: String,
+    },
 
-  email: {
-    type: String,
-    unique:true
-  },
-  profile : {
-    type: String,
-  },
-  name: {
-    type: String,
-  },
+    phone: {
+      type: Number,
+    },
 
-  phone: {
-    type: Number,
-  },
+    password: {
+      type: String,
+    },
 
-password:{
-  type: String,
-},
+    loginHistory: {
+      type: Array,
+    },
 
-  loginHistory:{
-    type:Array
-  },
+    role: {
+      type: String, //true - false only
+    },
 
-  role:{
-    type: String, //true - false only
-  },
+    status: {
+      type: String,
+    },
+    token: {
+      type: String,
+    },
 
-  status:{
-    type: String,
-  },
-  token:{
-    type:String
-  },
+    createdAt: {
+      type: String,
+    },
 
-
-  createdAt: {
-    type: String,
+    updatedAt: {
+      type: String,
+    },
   },
-
-  updatedAt: {
-    type: String,
-  },
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("adminData", AdminDataSchema);

@@ -1,4 +1,5 @@
 const Newsletter = require("../Model/newsletters.model");
+
 const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -36,12 +37,14 @@ exports.getNewsletterById = async (newsletterId) => {
 };
 
 exports.getAllNewsletter = async () => {
-  return await Newsletter.find();
+  return await Newsletter.find()
+    .sort({ updatedAt: -1 })
+    .populate("createdBy", "name -_id");
 };
 
 exports.updateNewsletterStatus = async (id, status) => {
   return await Newsletter.findOneAndUpdate(
-    { id },
+    { _id: id },
     { status, updatedAt: new Date() },
     { new: true }
   );
@@ -49,7 +52,7 @@ exports.updateNewsletterStatus = async (id, status) => {
 
 exports.updateNewsletterData = async (id, data) => {
   return await Newsletter.findOneAndUpdate(
-    { id },
+    { _id: id },
     { ...data, updateAt: new Date() },
     { new: true }
   );
@@ -57,7 +60,7 @@ exports.updateNewsletterData = async (id, data) => {
 
 exports.deleteNewsletter = async (id) => {
   try {
-    const newsletter = await Newsletter.findByIdAndRemove(id);
+    const newsletter = await Newsletter.findByIdAndRemove({ _id: id });
     if (!newsletter) {
       return {
         data: null,
@@ -68,7 +71,7 @@ exports.deleteNewsletter = async (id) => {
     return {
       data: null,
       status: true,
-      message: "Newsletter not found!",
+      message: "Newsletter deleted successfully!",
     };
   } catch (error) {
     return {
@@ -92,8 +95,10 @@ exports.sendNewsletter = async (newsletterId) => {
       html: newsletter.template,
     };
 
-    mailOptions.to = newsletter.emailId;
-    await transporter.sendMail(mailOptions);
+    for (const email of newsletter.emailId) {
+      mailOptions.to = email;
+      await transporter.sendMail(mailOptions);
+    }
 
     return { success: true, message: "Emails sent successfully" };
   } catch (error) {
