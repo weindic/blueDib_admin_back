@@ -50,6 +50,7 @@ exports.updateNewsletterStatus = async (id, status) => {
   );
 };
 
+
 exports.updateNewsletterData = async (id, data) => {
   return await Newsletter.findOneAndUpdate(
     { _id: id },
