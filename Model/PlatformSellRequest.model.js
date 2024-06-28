@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 
 // Define PlatformSellRequest schema
 const PlatformSellRequestSchema = new Schema({
+    _id: { type: Schema.Types.ObjectId, required: true },
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -23,7 +24,7 @@ const PlatformSellRequestSchema = new Schema({
         type: Date,
         default: Date.now
     }
-});
+}, { collection: 'PlatformSellRequest' });
 
 // Create model for PlatformSellRequest
 const PlatformSellRequest = mongoose.model('PlatformSellRequest', PlatformSellRequestSchema);

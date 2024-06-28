@@ -43,8 +43,9 @@ const AddFundRequestSchema = new Schema(
 AddFundRequestSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
   next();
-});
+}, { collection: 'AddFundRequest' });
 // Create and export the AddFundRequest model
 const AddFundRequest = mongoose.model("AddFundRequest", AddFundRequestSchema);
 
 module.exports = AddFundRequest;
+
